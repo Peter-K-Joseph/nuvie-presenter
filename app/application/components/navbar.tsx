@@ -1,202 +1,219 @@
-import React from "react";
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-} from "@heroui/dropdown";
-import {
-  Save,
-  FolderOpen,
-  Undo,
-  Redo,
-  Scissors,
-  Copy,
-  Clipboard,
-  ZoomIn,
-  ZoomOut,
-  Ruler,
-  Grid,
-  Maximize,
-  BoxSelect,
-} from "lucide-react";
+import { Button } from "@heroui/button";
+import { User } from "@heroui/user";
+import { Divider } from "@heroui/divider";
+import { Skeleton } from "@heroui/skeleton";
+import { ArrowLeft, File, Search } from "lucide-react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { AnimatePresence, motion } from "framer-motion";
 
-const navItems = [
-  {
-    label: "File",
-    options: [
-      {
-        label: "Save",
-        action: "Save the current file to draft",
-        icon: Save,
-        disabled: false,
-        call: () => console.log("Save"),
-        shortcut: "s",
-        isCmd: true,
-        keywords: ["save", "draft"],
-      },
-      {
-        label: "Open",
-        action: "Open a file",
-        icon: FolderOpen,
-        disabled: false,
-        call: () => console.log("Open"),
-        shortcut: "o",
-        isCmd: true,
-        keywords: ["open", "file"],
-      },
-    ],
-  },
-  {
-    label: "Edit",
-    options: [
-      {
-        label: "Undo",
-        action: "Undo the last action",
-        icon: Undo,
-        disabled: false,
-        call: () => console.log("Undo"),
-        shortcut: "z",
-        isCmd: true,
-        keywords: ["undo"],
-      },
-      {
-        label: "Redo",
-        action: "Redo the last undone action",
-        icon: Redo,
-        disabled: false,
-        call: () => console.log("Redo"),
-        shortcut: "y",
-        isCmd: true,
-        keywords: ["redo"],
-      },
-      {
-        label: "Cut",
-        action: "Cut the selected content",
-        icon: Scissors,
-        disabled: false,
-        call: () => console.log("Cut"),
-        shortcut: "x",
-        isCmd: true,
-        keywords: ["cut"],
-      },
-      {
-        label: "Copy",
-        action: "Copy the selected content",
-        icon: Copy,
-        disabled: false,
-        call: () => console.log("Copy"),
-        shortcut: "c",
-        isCmd: true,
-        keywords: ["copy"],
-      },
-      {
-        label: "Paste",
-        action: "Paste the copied content",
-        icon: Clipboard,
-        disabled: false,
-        call: () => console.log("Paste"),
-        shortcut: "v",
-        isCmd: true,
-        keywords: ["paste"],
-      },
-      {
-        label: "Select All",
-        action: "Select all content",
-        icon: BoxSelect,
-        disabled: false,
-        call: () => console.log("Select All"),
-        shortcut: "a",
-        isCmd: true,
-        keywords: ["select all"],
-      },
-    ],
-  },
-  {
-    label: "View",
-    options: [
-      {
-        label: "Zoom In",
-        action: "Increase the zoom level",
-        icon: ZoomIn,
-        disabled: false,
-        call: () => console.log("Zoom In"),
-        shortcut: "+",
-        isCmd: true,
-        keywords: ["zoom in"],
-      },
-      {
-        label: "Zoom Out",
-        action: "Decrease the zoom level",
-        icon: ZoomOut,
-        disabled: false,
-        call: () => console.log("Zoom Out"),
-        shortcut: "-",
-        isCmd: true,
-        keywords: ["zoom out"],
-      },
-      {
-        label: "Ruler",
-        action: "Toggle the ruler display",
-        icon: Ruler,
-        disabled: false,
-        call: () => console.log("Ruler"),
-        shortcut: "r",
-        isCmd: true,
-        keywords: ["ruler"],
-      },
-      {
-        label: "Gridlines",
-        action: "Toggle the gridlines display",
-        icon: Grid,
-        disabled: false,
-        call: () => console.log("Gridlines"),
-        shortcut: "g",
-        isCmd: true,
-        keywords: ["gridlines"],
-      },
-      {
-        label: "Full Screen",
-        action: "Toggle full screen mode",
-        icon: Maximize,
-        disabled: false,
-        call: () => console.log("Full Screen"),
-        shortcut: "f",
-        isCmd: true,
-        keywords: ["full screen"],
-      },
-    ],
-  },
-];
+import { openCommander } from "../redux/store";
+
+class UserModel {
+  name: string;
+  permission: string;
+  url: string;
+
+  constructor(name: string, permission: string, url: string) {
+    this.name = name;
+    this.permission = permission;
+    this.url = url;
+  }
+}
+
+class NavInfoModel {
+  title: string;
+  created_by: UserModel;
+  date: Date;
+  current_user: UserModel;
+
+  constructor(
+    title: string,
+    created_by: UserModel,
+    date: Date,
+    current_user: UserModel,
+  ) {
+    this.title = title;
+    this.created_by = created_by;
+    this.date = date;
+    this.current_user = current_user;
+  }
+}
 
 const Navbar = () => {
-  const [active, setActive] = React.useState(null);
+  const [info, setInfo] = React.useState<NavInfoModel | undefined>(undefined);
+  const focusMode = useSelector((state: any) => {
+    return state.store.focusMode;
+  });
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setTimeout(() => {
+      setInfo(
+        new NavInfoModel(
+          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates reprehenderit eius obcaecati, ad ratione magni quaerat ut recusandae veritatis sunt odio amet tenetur. Quas est omnis obcaecati nulla aspernatur sit.",
+          new UserModel(
+            "Peter K Joseph",
+            "Software Engineer",
+            "https://avatars.githubusercontent.com/u/30373425?v=4",
+          ),
+          new Date(),
+          new UserModel(
+            "Peter K Joseph",
+            "Software Engineer",
+            "https://avatars.githubusercontent.com/u/30373425?v=4",
+          ),
+        ),
+      );
+    }, 1000);
+  }, []);
 
   return (
-    <div className="border-b shadow-md">
-      <div className="flex items-center space-x-6 p-3">
-        <div className="space-x-2 -translate-y-[0.15rem]">
-          <h1 className="text-3xl font-bold select-none">nuvie</h1>
-        </div>
-        {navItems.map((item, index) => (
-          <Dropdown key={index}>
-            <DropdownTrigger className="focus:outline-none ml-2 mr-2 flex items-center space-x-2">
-              <button className="focus:outline-none">{item.label}</button>
-            </DropdownTrigger>
-            <DropdownMenu>
-              {item.options.map((option, i) => (
-                <DropdownItem key={i} textValue="true" onPress={option.call}>
-                  <div className="flex items-center space-x-2">
-                    <option.icon className="mr-2" size={16} />
-                    <p>{option.label}</p>
+    <>
+      <AnimatePresence>
+        {!focusMode && (
+          <motion.div
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10, overflow: "hidden", height: 0 }}
+            initial={{ opacity: 0, y: -10 }}
+          >
+            <div className="border-b-medium">
+              <div className="flex items-center justify-between space-x-7 p-3">
+                <div className="flex items-center space-x-2 w-1/2">
+                  <Button isIconOnly color="primary">
+                    <ArrowLeft />
+                  </Button>
+                  <Divider className="h-10" orientation="vertical" />
+                  <File size={40} />
+                  <div className="flex-1 min-w-0">
+                    <AnimatePresence>
+                      {info == undefined && (
+                        <motion.div
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 10 }}
+                          initial={{ opacity: 0, x: -10 }}
+                        >
+                          <Skeleton className="h-3 w-2/4 rounded-lg mt-1" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    <AnimatePresence>
+                      {info != undefined && (
+                        <motion.div
+                          animate={{
+                            opacity: 1,
+                            x: 0,
+                            display: "block",
+                          }}
+                          className="flex items-center space-x-2"
+                          exit={{ opacity: 0.8, x: 10, display: "none" }}
+                          initial={{ display: "none", opacity: 0.8, x: -10 }}
+                          transition={{ delay: 0.3 }}
+                        >
+                          <h1 className="text-lg font-bold select-none truncate follow-brand">
+                            {info.title}
+                          </h1>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    <AnimatePresence>
+                      {info == undefined && (
+                        <motion.div
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 10 }}
+                          initial={{ opacity: 0, x: -10 }}
+                        >
+                          <Skeleton className="h-3 w-1/4 rounded-lg mt-1" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    <AnimatePresence>
+                      {info != undefined && (
+                        <motion.div
+                          animate={{
+                            opacity: 1,
+                            x: 0,
+                            display: "block",
+                          }}
+                          className="flex items-center space-x-2"
+                          exit={{ opacity: 0, x: 10, display: "none" }}
+                          initial={{ display: "none", opacity: 0, x: -10 }}
+                          transition={{ delay: 0.3 }}
+                        >
+                          <p className="text-xs font-normal text-gray-400 follow-brand">
+                            Created by <b>{info.created_by.name}</b> on
+                            <i> {info.date.toDateString()}</i>
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
-                </DropdownItem>
-              ))}
-            </DropdownMenu>
-          </Dropdown>
-        ))}
-      </div>
-    </div>
+                </div>
+                <div className="w-1/2 flex items-center justify-end space-x-2 -translate-y-[0.15rem]">
+                  <Button
+                    isIconOnly
+                    aria-label="search"
+                    color="primary"
+                    onPress={() => dispatch(openCommander())}
+                  >
+                    <Search />
+                  </Button>
+                  <Divider className="h-10" orientation="vertical" />
+                  <div>
+                    {info == undefined ? (
+                      <div>
+                        <Skeleton className="flex rounded-full w-12 h-12" />
+                      </div>
+                    ) : (
+                      <motion.div
+                        animate={{ opacity: 1, x: 0 }}
+                        className="flex items-center space-x-2"
+                        initial={{ opacity: 0, x: 10 }}
+                      >
+                        <User
+                          avatarProps={{
+                            src: info.current_user.url,
+                          }}
+                          description={
+                            <p className="text-xs text-gray-400">
+                              {info.current_user.permission}
+                            </p>
+                          }
+                          name={info.current_user.name}
+                        />
+                      </motion.div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {focusMode && (
+          <motion.div
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
+          >
+            <Button
+              isIconOnly
+              aria-label="search"
+              className="fixed bottom-5 right-5"
+              color="primary"
+              onPress={() => dispatch(openCommander())}
+            >
+              <Search />
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 

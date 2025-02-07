@@ -1,5 +1,6 @@
 import React from "react";
 import { Kbd, KbdKey } from "@heroui/kbd";
+import { Tooltip } from "@heroui/tooltip";
 
 import {
   CommandGroup,
@@ -37,7 +38,7 @@ export class CommanderModel {
       isCtrl?: boolean;
       isCmd?: boolean;
       keywords?: string[];
-    }
+    },
   ) {
     this.name = name;
     this.shortcut = shortcut || "";
@@ -74,17 +75,19 @@ export class CommanderModel {
 
   toWidget(closeFunction: () => void): JSX.Element {
     return (
-      <CommandItem
-        disabled={this.disabled}
-        keywords={this.keywords}
-        onSelect={() => this.callback(closeFunction)}
-      >
-        {React.createElement(this.icon)}
-        <span>{this.name}</span>
-        {this.shortcut && (
-          <CommandShortcut>{this._generateShortcut()}</CommandShortcut>
-        )}
-      </CommandItem>
+      <Tooltip color="default" content={this.action} delay={1000}>
+        <CommandItem
+          disabled={this.disabled}
+          keywords={this.keywords}
+          onSelect={() => this.callback(closeFunction)}
+        >
+          {React.createElement(this.icon)}
+          <span>{this.name}</span>
+          {this.shortcut && (
+            <CommandShortcut>{this._generateShortcut()}</CommandShortcut>
+          )}
+        </CommandItem>
+      </Tooltip>
     );
   }
 }

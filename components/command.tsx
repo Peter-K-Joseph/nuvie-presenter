@@ -1,5 +1,5 @@
 "use client";
-import { LucideSearchX, Save } from "lucide-react";
+import { Edit, Focus, Info, LucideSearchX, Save, View } from "lucide-react";
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/command";
 import { CommanderModel, CommandGroupModel } from "@/src/models/commands-model";
 import { ThemeController } from "@/src/controller/theme-provider";
+import { closeCommander, toggleCommander, toggleFocus } from "@/app/application/redux/store";
 
 const CommandNotFound = () => (
   <div>
@@ -41,10 +42,9 @@ const CommandNotFound = () => (
 );
 
 const Commander = () => {
-  // const [commander, setCommander] = useState(false);
-  const commander = useSelector(
-    (state: any) => state.commanderActionScreen.value,
-  );
+  const commander = useSelector((state: any) => {
+    return state.store.commanderOpen;
+  });
   const dispatch = useDispatch();
   const { theme, setTheme } = useTheme();
   const themeManager = new ThemeController(theme, setTheme);
@@ -58,6 +58,40 @@ const Commander = () => {
         false,
         () => console.log("Save"),
         { shortcut: "s", isCmd: true, keywords: ["save", "draft"] },
+      ),
+      new CommanderModel(
+        "Focus Mode",
+        "Toggle focus mode",
+        () => <Focus />,
+        false,
+        () => dispatch(toggleFocus()),
+        { shortcut: "f", isCmd: true, keywords: ["focus", "mode"] },
+      ),
+    ]),
+    new CommandGroupModel("View Mode", [
+      new CommanderModel(
+        "Switch to editor mode",
+        "Switched to editor mode",
+        () => <Edit />,
+        false,
+        () => console.log("Editor"),
+        { keywords: ["editor", "edit", "mode"] },
+      ),
+      new CommanderModel(
+        "Switch to preview mode",
+        "Switched to preview mode",
+        () => <View />,
+        false,
+        () => console.log("Preview"),
+        { keywords: ["preview", "view", "mode"] },
+      ),
+      new CommanderModel(
+        "Article Information",
+        "View and Edit article information",
+        () => <Info />,
+        false,
+        () => console.log("Info"),
+        { keywords: ["info", "mode", "seo", "article"] },
       ),
     ]),
     new CommandGroupModel("Settings", [
@@ -76,7 +110,7 @@ const Commander = () => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "k") {
         event.preventDefault();
-        dispatch(commander.actions.toggle());
+        dispatch(toggleCommander());
       }
     };
 
@@ -90,7 +124,7 @@ const Commander = () => {
   return (
     <CommandDialog
       open={commander}
-      onOpenChange={() => dispatch(commander.actions.close())}
+      onOpenChange={() => dispatch(closeCommander())}
     >
       <Command label="Commander">
         <CommandInput placeholder="Type a command or search..." />
@@ -101,7 +135,7 @@ const Commander = () => {
           {commands.map((group, index) => (
             <React.Fragment key={`group-command-${index}`}>
               {group.toWidget(() => {
-                dispatch(commander.actions.close());
+                dispatch(closeCommander());
               })}
             </React.Fragment>
           ))}

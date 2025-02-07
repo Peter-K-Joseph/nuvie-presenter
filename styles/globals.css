@@ -67,6 +67,6 @@
 }
 
 /* use josfin sans for all the text */
-* {
+.follow-brand {
   font-family: "Josefin Sans", sans-serif;
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "sonner";
 
 import { MoonFilledIcon, SunFilledIcon } from "@/components/icons";
 
@@ -11,6 +12,15 @@ export class ThemeController {
     this.setTheme = setTheme;
   }
   toggle = () => {
+    toast("Theme changed", {
+      description: `Switching to ${this.theme === "dark" ? "light" : "dark"} mode`,
+      action: {
+        label: "Undo",
+        onClick: () => {
+          this.setTheme(this.theme);
+        },
+      },
+    });
     this.setTheme(this.theme === "dark" ? "light" : "dark");
   };
 

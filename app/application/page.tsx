@@ -1,16 +1,25 @@
 "use client";
-import Commander from "@/components/command";
 import React from "react";
-import NavBar from "./components/navbar";
+import { Toaster } from "sonner";
+import { Provider } from "react-redux";
 
+import NavBar from "./components/navbar";
+import ContentEditorPage from "./components/body";
+import store from "./redux/store";
+
+import Commander from "@/components/command";
 
 class PresentationView extends React.Component {
   render() {
     return (
-      <div className="w-screen h-screen">
-        <Commander />
-        <NavBar />
-      </div>
+      <Provider store={store}>
+        <div className="w-screen h-screen max-h-screen flex flex-col">
+          <Commander />
+          <NavBar />
+          <Toaster />
+          <ContentEditorPage />
+        </div>
+      </Provider>
     );
   }
 }

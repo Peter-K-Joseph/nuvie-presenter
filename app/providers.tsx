@@ -6,9 +6,6 @@ import * as React from "react";
 import { HeroUIProvider } from "@heroui/system";
 import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { Provider } from "react-redux";
-
-import commander from "@/lib/redux/commander";
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -28,9 +25,7 @@ export function Providers({ children, themeProps }: ProvidersProps) {
 
   return (
     <HeroUIProvider navigate={router.push}>
-      <Provider store={commander}>
-        <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
-      </Provider>
+      <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
     </HeroUIProvider>
   );
 }
