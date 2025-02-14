@@ -14,7 +14,11 @@ import {
 } from "@/components/ui/command";
 import { CommanderModel, CommandGroupModel } from "@/src/models/commands-model";
 import { ThemeController } from "@/src/controller/theme-provider";
-import { closeCommander, toggleCommander, toggleFocus } from "@/app/application/redux/store";
+import {
+  closeCommander,
+  toggleCommander,
+  toggleFocus,
+} from "@/app/application/redux/store";
 
 const CommandNotFound = () => (
   <div>

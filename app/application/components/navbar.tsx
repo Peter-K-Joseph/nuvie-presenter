@@ -94,7 +94,7 @@ const Navbar = () => {
                           exit={{ opacity: 0, x: 10 }}
                           initial={{ opacity: 0, x: -10 }}
                         >
-                          <Skeleton className="h-3 w-2/4 rounded-lg mt-1" />
+                          <Skeleton className="h-4 w-3/4 rounded-lg mt-1" />
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -110,7 +110,7 @@ const Navbar = () => {
                           className="flex items-center space-x-2"
                           exit={{ opacity: 0.8, x: 10, display: "none" }}
                           initial={{ display: "none", opacity: 0.8, x: -10 }}
-                          transition={{ delay: 0.3 }}
+                          transition={{ delay: 0.35 }}
                         >
                           <h1 className="text-lg font-bold select-none truncate follow-brand">
                             {info.title}
@@ -126,7 +126,7 @@ const Navbar = () => {
                           exit={{ opacity: 0, x: 10 }}
                           initial={{ opacity: 0, x: -10 }}
                         >
-                          <Skeleton className="h-3 w-1/4 rounded-lg mt-1" />
+                          <Skeleton className="h-3 w-1/4 rounded-lg mt-2" />
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -142,7 +142,7 @@ const Navbar = () => {
                           className="flex items-center space-x-2"
                           exit={{ opacity: 0, x: 10, display: "none" }}
                           initial={{ display: "none", opacity: 0, x: -10 }}
-                          transition={{ delay: 0.3 }}
+                          transition={{ delay: 0.35 }}
                         >
                           <p className="text-xs font-normal text-gray-400 follow-brand">
                             Created by <b>{info.created_by.name}</b> on

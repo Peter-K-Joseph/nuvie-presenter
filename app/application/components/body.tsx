@@ -2,7 +2,9 @@ import { useSelector } from "react-redux";
 import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Tabs, Tab } from "@heroui/tabs";
-import { Divider } from "@heroui/divider";
+
+import TextEditor from "./editor";
+import InputStyle from "./input_style";
 
 const SideBar = () => {
   const focusMode = useSelector((state: any) => {
@@ -10,15 +12,7 @@ const SideBar = () => {
   });
   const [state, setState] = React.useState("floors");
 
-  const floors = () => {
-    return (
-      <div>
-        <h1>Floors</h1>
-      </div>
-    );
-  };
-
-  const bom = () => {
+  const components = () => {
     return (
       <div>
         <h1>BOM</h1>
@@ -26,11 +20,29 @@ const SideBar = () => {
     );
   };
 
-  const info = () => {
+  const overview = () => {
     return (
-      <div>
-        <h1>Info</h1>
+      <div className="info-panel mt-2 flex-grow mb-10 overflow-hidden w-full">
+        <InputStyle />
       </div>
+    );
+  };
+
+  const animateSidebar = (child: React.JSX.Element) => {
+    return (
+      <motion.div
+        animate={{ opacity: 1, y: 0, display: "block" }}
+        className="w-full relative"
+        exit={{ opacity: 0, y: "100%" }}
+        initial={{
+          opacity: 0,
+          y: "100%",
+          display: "none",
+        }}
+        transition={{ duration: 0.1, type: "curve", delay: 0.2 }}
+      >
+        {child}
+      </motion.div>
     );
   };
 
@@ -39,10 +51,10 @@ const SideBar = () => {
       {!focusMode && (
         <motion.div
           animate={{ opacity: 1, x: 0 }}
-          className="w-1/4 h-full border-r-medium min-w-[300px] p-2"
+          className="w-1/5 h-full border-r-medium min-w-[300px] p-2 max-w-1/5"
           exit={{ opacity: 0, x: "-100%" }}
           initial={{ opacity: 0, x: "-100%" }}
-          transition={{ duration: 0.3, type: "tween" }}
+          transition={{ duration: 0.3, type: "easeInOut" }}
         >
           <div className="flex w-full flex-col items-center">
             <Tabs
@@ -55,18 +67,15 @@ const SideBar = () => {
                 setState(key as string);
               }}
             >
-              <Tab key="floors" title="Floors" />
-              <Tab key="bom" title="BOM" />
-              <Tab key="info" title="Info" />
+              <Tab key="overview" title="Overview" />
+              <Tab key="components" title="Component" />
             </Tabs>
-            <Divider className="w-full" />
-            {
-              {
-                floors: floors(),
-                bom: bom(),
-                info: info(),
-              }[state]
-            }
+            <AnimatePresence>
+              {state === "overview" && animateSidebar(overview())}
+            </AnimatePresence>
+            <AnimatePresence>
+              {state === "components" && animateSidebar(components())}
+            </AnimatePresence>
           </div>
         </motion.div>
       )}
@@ -78,6 +87,7 @@ const ContentEditorPage = () => {
   return (
     <div className="flex h-full">
       <SideBar />
+      <TextEditor />
     </div>
   );
 };
